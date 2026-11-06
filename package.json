@@ -35,6 +35,7 @@
   "overrides": {
     "postcss": "^8.5.23",
     "@typescript-eslint/typescript-estree": {
+      ".": "^8.46.0",
       "minimatch": "^11.0.5"
     },
     "@typescript-eslint/eslint-plugin": "^8.46.0",
@@ -42,7 +43,6 @@
     "@typescript-eslint/scope-manager": "^8.46.0",
     "@typescript-eslint/type-utils": "^8.46.0",
     "@typescript-eslint/types": "^8.46.0",
-    "@typescript-eslint/typescript-estree": "^8.46.0",
     "@typescript-eslint/utils": "^8.46.0",
     "@typescript-eslint/visitor-keys": "^8.46.0"
   }
