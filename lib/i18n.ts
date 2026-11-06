@@ -2,69 +2,20 @@ export const languages = [
   ["ar", "العربية"],
   ["en", "English"],
   ["zh-CN", "简体中文"],
-  ["zh-TW", "繁體中文"],
-  ["es", "Español"],
-  ["fr", "Français"],
-  ["de", "Deutsch"],
-  ["it", "Italiano"],
-  ["pt", "Português"],
-  ["pt-BR", "Português (Brasil)"],
-  ["ru", "Русский"],
-  ["ja", "日本語"],
-  ["ko", "한국어"],
-  ["tr", "Türkçe"],
-  ["fa", "فارسی"],
-  ["ur", "اردو"],
-  ["hi", "हिन्दी"],
-  ["bn", "বাংলা"],
-  ["id", "Bahasa Indonesia"],
-  ["ms", "Bahasa Melayu"],
-  ["th", "ไทย"],
-  ["vi", "Tiếng Việt"],
-  ["fil", "Filipino"],
-  ["sw", "Kiswahili"],
-  ["nl", "Nederlands"],
-  ["sv", "Svenska"],
-  ["no", "Norsk"],
-  ["da", "Dansk"],
-  ["fi", "Suomi"],
-  ["el", "Ελληνικά"],
-  ["he", "עברית"],
-  ["pl", "Polski"],
-  ["cs", "Čeština"],
-  ["sk", "Slovenčina"],
-  ["uk", "Українська"],
-  ["ro", "Română"],
-  ["hu", "Magyar"],
-  ["bg", "Български"],
-  ["hr", "Hrvatski"],
-  ["sr", "Српски"],
-  ["sl", "Slovenščina"],
-  ["sq", "Shqip"],
-  ["is", "Íslenska"],
-  ["ga", "Gaeilge"],
-  ["lt", "Lietuvių"],
-  ["lv", "Latviešu"],
-  ["et", "Eesti"],
-  ["kk", "Қазақша"],
-  ["uz", "O‘zbekcha"],
-  ["az", "Azərbaycanca"],
-  ["hy", "Հայերեն"],
-  ["ka", "ქართული"],
-  ["ne", "नेपाली"],
-  ["si", "සිංහල"],
-  ["ta", "தமிழ்"],
-  ["te", "తెలుగు"],
-  ["mr", "मराठी"],
-  ["am", "አማርኛ"],
-  ["km", "ភាសាខ្មែរ"],
-  ["my", "မြန်မာဘာသာ"],
-  ["lo", "ລາວ"],
 ] as const;
 
 export type LanguageCode = (typeof languages)[number][0];
 
-export const rtlLanguages = new Set<LanguageCode>(["ar", "fa", "ur", "he"]);
+export const rtlLanguages = new Set<LanguageCode>(["ar"]);
+
+export function resolveLanguage(value: string | null | undefined): LanguageCode | null {
+  if (!value) return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "ar" || normalized.startsWith("ar-")) return "ar";
+  if (normalized === "en" || normalized.startsWith("en-")) return "en";
+  if (normalized === "zh" || normalized.startsWith("zh-")) return "zh-CN";
+  return null;
+}
 
 export const translations = {
   en: {
@@ -161,11 +112,57 @@ export const translations = {
     passwordRule: "استخدم 10 أحرف على الأقل.",
     backHome: "العودة للرئيسية",
   },
+  "zh-CN": {
+    navDiscover: "发现",
+    navHow: "使用方式",
+    navSafety: "安全",
+    signIn: "登录",
+    signUp: "创建账户",
+    heroEyebrow: "遇见与你合拍的人",
+    heroTitle: "美好的故事，始于真诚的相遇。",
+    heroBody: "认识与你步调相近、充满好奇心，也珍视生活细节的人。",
+    findPeople: "寻找心仪的人",
+    meetSomeone: "认识新朋友",
+    members: "更用心的相识方式",
+    membersBody: "少一些匆忙滑动，多一些了解彼此的空间。",
+    profileLabel: "一段美好的对话也许从这里开始",
+    memberLocation: "葡萄牙，里斯本",
+    memberBio: "喜欢小书店、悠长午餐和世界各地的故事。",
+    compatibility: "82% 志趣相投",
+    footerTagline: "遇见熟悉之外的美好。",
+    email: "电子邮箱",
+    password: "密码",
+    confirmPassword: "确认密码",
+    name: "你的姓名",
+    createAccount: "创建账户",
+    continueGoogle: "使用 Google 继续",
+    orEmail: "或使用电子邮箱继续",
+    alreadyAccount: "已经有账户？",
+    noAccount: "第一次使用 WeDating？",
+    forgotPassword: "忘记密码？",
+    sendReset: "发送重置链接",
+    verificationNotice: "请先查收邮件并验证邮箱，然后再登录。",
+    passwordMismatch: "两次输入的密码不一致。",
+    genericError: "发生错误，请重试。",
+    setupError: "账户服务尚未配置，请稍后重试。",
+    invalidError: "请检查你填写的信息。",
+    credentialsError: "邮箱或密码不正确。",
+    accountDisabled: "此账户目前已停用，请联系支持团队。",
+    googleError: "Google 登录暂不可用，请尝试使用邮箱。",
+    termsConsent: "我同意服务条款和隐私政策。",
+    terms: "服务条款",
+    privacy: "隐私政策",
+    googleUnavailable: "无法启动 Google 登录。",
+    checkEmail: "请查收电子邮箱",
+    resetSent: "如果此邮箱对应账户，你将收到密码重置链接。",
+    accountUpdated: "密码已更新，请使用新密码登录。",
+    passwordRule: "密码至少需要 10 个字符。",
+    backHome: "返回首页",
+  },
 } as const;
 
 export type TranslationKey = keyof typeof translations.en;
 
 export function getTranslation(language: LanguageCode, key: TranslationKey) {
-  const dictionary = translations[language as keyof typeof translations] ?? translations.en;
-  return dictionary[key] ?? translations.en[key];
+  return translations[language][key];
 }
