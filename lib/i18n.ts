@@ -11,10 +11,8 @@ export const rtlLanguages = new Set<LanguageCode>(["ar"]);
 export function resolveLanguage(value: string | null | undefined): LanguageCode | null {
   if (!value) return null;
   const normalized = value.trim().toLowerCase();
-  if (normalized === "ar" || normalized.startsWith("ar-")) return "ar";
-  if (normalized === "en" || normalized.startsWith("en-")) return "en";
   if (normalized === "zh" || normalized.startsWith("zh-")) return "zh-CN";
-  return null;
+  return languages.find(([code]) => normalized === code.toLowerCase() || normalized.startsWith(`${code.toLowerCase()}-`))?.[0] ?? null;
 }
 
 export const translations = {

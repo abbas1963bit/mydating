@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getTranslation, languages, rtlLanguages, type LanguageCode, type TranslationKey } from "@/lib/i18n";
+import { getTranslation, resolveLanguage, rtlLanguages, type LanguageCode, type TranslationKey } from "@/lib/i18n";
 
 type LanguageContextValue = {
   language: LanguageCode;
@@ -17,18 +17,7 @@ export function LanguageProvider({ children }: Readonly<{ children: React.ReactN
 
   useEffect(() => {
     const saved = window.localStorage.getItem(storageKey);
-    const browserLocale = new Intl.Locale(navigator.language);
-    const browserLanguage = browserLocale.language.toLowerCase();
-    const browserCode = browserLanguage === "zh"
-      ? browserLocale.script === "Hant" || ["TW", "HK", "MO"].includes(browserLocale.region ?? "") ? "zh-TW" : "zh-CN"
-      : browserLanguage === "pt" && browserLocale.region === "BR" ? "pt-BR"
-      : browserLanguage === "nb" ? "no"
-      : browserLanguage === "tl" ? "fil"
-      : browserLanguage === "iw" ? "he"
-      : browserLocale.toString();
-    const detected = languages.find(([code]) => code.toLowerCase() === browserCode.toLowerCase())
-      ?? languages.find(([code]) => code.toLowerCase() === browserLanguage);
-    const initial = languages.some(([code]) => code === saved) ? saved as LanguageCode : detected?.[0] ?? "en";
+    const initial = resolveLanguage(saved) ?? resolveLanguage(navigator.language) ?? "en";
     setCurrentLanguage(initial);
   }, []);
 
@@ -38,8 +27,8 @@ export function LanguageProvider({ children }: Readonly<{ children: React.ReactN
   }, [language]);
 
   function setLanguage(value: string) {
-    if (!languages.some(([code]) => code === value)) return;
-    const next = value as LanguageCode;
+    const next = resolveLanguage(value);
+    if (!next) return;
     window.localStorage.setItem(storageKey, next);
     setCurrentLanguage(next);
   }
