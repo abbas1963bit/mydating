@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
+import { LocalizedDate, LocalizedPageText, LocalizedUnreadIndicator } from "@/components/language-provider";
 
 export const metadata: Metadata = { title: "Messages" };
 
@@ -26,14 +27,14 @@ export default async function MessagesPage() {
 
   return (
     <>
-      <div className="page-heading"><div><span className="eyebrow-small">Words make a beginning</span><h1>Messages</h1><p>Your conversations are private. Messages support text and emoji only.</p></div></div>
+      <div className="page-heading"><div><span className="eyebrow-small"><LocalizedPageText translationKey="sayHelloStart" /></span><h1><LocalizedPageText translationKey="messagesTitle" /></h1><p><LocalizedPageText translationKey="messagesIntro" /></p></div></div>
       {conversations?.length ? <div className="conversation-list">{conversations.map((conversation) => {
         const otherId = conversation.member_one === user.id ? conversation.member_two : conversation.member_one;
         const profile = profileMap.get(otherId);
         const latest = latestMessages.get(conversation.id);
         if (!profile) return null;
-        return <Link key={conversation.id} href={`/messages/${conversation.id}`} className="conversation-row"><span className="conversation-avatar">{profile.avatar_path && photos.get(profile.avatar_path) ? <Image src={photos.get(profile.avatar_path)!} alt="" fill sizes="52px" /> : profile.display_name.slice(0, 1).toUpperCase()}</span><span className="conversation-copy"><strong>{profile.display_name}{profile.is_verified && <span className="verified-check" title="Verified">✓</span>}</strong><span>{latest ? `${latest.sender_id === user.id ? "You: " : ""}${latest.body}` : "Say hello and start a conversation."}</span></span><span className="conversation-meta"><time>{new Date(latest?.created_at ?? conversation.last_message_at).toLocaleDateString()}</time>{latest?.sender_id !== user.id && !latest?.read_at && <i aria-label="Unread messages" />}</span></Link>;
-      })}</div> : <div className="empty-state"><MessageCircle size={24} /><h2>Your conversations start with a hello</h2><p>Visit a profile and open a conversation. Text and emoji are the only supported message types.</p><Link className="button button-rose" href="/discover">Find someone to meet</Link></div>}
+        return <Link key={conversation.id} href={`/messages/${conversation.id}`} className="conversation-row"><span className="conversation-avatar">{profile.avatar_path && photos.get(profile.avatar_path) ? <Image src={photos.get(profile.avatar_path)!} alt="" fill sizes="52px" /> : profile.display_name.slice(0, 1).toUpperCase()}</span><span className="conversation-copy"><strong>{profile.display_name}{profile.is_verified && <span className="verified-check" aria-hidden="true">✓</span>}</strong><span>{latest ? <>{latest.sender_id === user.id && <LocalizedPageText translationKey="youPrefix" />}{latest.body}</> : <LocalizedPageText translationKey="sayHelloStart" />}</span></span><span className="conversation-meta"><time><LocalizedDate value={latest?.created_at ?? conversation.last_message_at} /></time>{latest?.sender_id !== user.id && !latest?.read_at && <LocalizedUnreadIndicator />}</span></Link>;
+      })}</div> : <div className="empty-state"><MessageCircle size={24} /><h2><LocalizedPageText translationKey="noConversationsTitle" /></h2><p><LocalizedPageText translationKey="noConversationsBody" /></p><Link className="button button-rose" href="/discover"><LocalizedPageText translationKey="findMember" /></Link></div>}
     </>
   );
 }

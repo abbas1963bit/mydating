@@ -7,6 +7,7 @@ import { sendMessage } from "@/app/actions/members";
 import { ChatRefresh } from "@/components/chat-refresh";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
+import { LocalizedDate, LocalizedIconLink, LocalizedPageText, LocalizedTextarea } from "@/components/language-provider";
 
 export const metadata: Metadata = { title: "Conversation" };
 
@@ -32,17 +33,17 @@ export default async function ConversationPage({ params, searchParams }: { param
   return (
     <section className="chat-panel">
       <ChatRefresh />
-      <header className="chat-header"><Link href="/messages" className="chat-back" aria-label="Back to messages"><ArrowLeft size={17} /></Link><Link href={`/members/${other.id}`} className="chat-person"><span className="conversation-avatar">{other.avatar_path && photoUrls.get(other.avatar_path) ? <Image src={photoUrls.get(other.avatar_path)!} alt="" fill sizes="42px" /> : other.display_name.slice(0, 1).toUpperCase()}</span><span><strong>{other.display_name}{other.is_verified && <span className="verified-check">✓</span>}</strong><small>Private conversation</small></span></Link><Link href={`/members/${other.id}`} className="icon-button" aria-label="Member profile" title="Member profile"><ShieldCheck size={17} /></Link></header>
-      <div className="chat-safety"><MessageCircle size={14} />Text and emoji only. Never share information you are not comfortable sharing.</div>
+      <header className="chat-header"><LocalizedIconLink href="/messages" className="chat-back" translationKey="backToMessages"><ArrowLeft size={17} /></LocalizedIconLink><Link href={`/members/${other.id}`} className="chat-person"><span className="conversation-avatar">{other.avatar_path && photoUrls.get(other.avatar_path) ? <Image src={photoUrls.get(other.avatar_path)!} alt="" fill sizes="42px" /> : other.display_name.slice(0, 1).toUpperCase()}</span><span><strong>{other.display_name}{other.is_verified && <span className="verified-check">✓</span>}</strong><small><LocalizedPageText translationKey="privateConversation" /></small></span></Link><LocalizedIconLink href={`/members/${other.id}`} className="icon-button" translationKey="profileLink"><ShieldCheck size={17} /></LocalizedIconLink></header>
+      <div className="chat-safety"><MessageCircle size={14} /><LocalizedPageText translationKey="chatSafety" /></div>
       <div className="chat-messages" aria-live="polite">
         {messages?.length ? messages.map((message) => {
           const mine = message.sender_id === user.id;
-          const status = message.read_at ? "Read" : message.delivered_at ? "Delivered" : "Sent";
-          return <div key={message.id} className={`message-line ${mine ? "mine" : "theirs"}`}><div className="message-bubble"><p>{message.body}</p><div className="message-meta"><time dateTime={message.created_at}>{new Date(message.created_at).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}</time>{mine && <span>{status}</span>}</div></div></div>;
-        }) : <div className="chat-empty"><MessageCircle size={22} /><p>A good conversation can start with one simple question.</p></div>}
+          const statusKey = message.read_at ? "statusRead" : message.delivered_at ? "statusDelivered" : "statusSent";
+          return <div key={message.id} className={`message-line ${mine ? "mine" : "theirs"}`}><div className="message-bubble"><p>{message.body}</p><div className="message-meta"><time dateTime={message.created_at}><LocalizedDate value={message.created_at} withTime /></time>{mine && <span><LocalizedPageText translationKey={statusKey} /></span>}</div></div></div>;
+        }) : <div className="chat-empty"><MessageCircle size={22} /><p><LocalizedPageText translationKey="firstMessagePrompt" /></p></div>}
       </div>
-      {query.error && <p className="form-error chat-error" role="alert">Your message could not be sent. Please try again.</p>}
-      <form className="chat-compose" action={sendMessage}><input type="hidden" name="conversation_id" value={conversationId} /><label className="sr-only" htmlFor="message">Write a message</label><textarea id="message" name="body" maxLength={2000} rows={1} placeholder="Write a message…" required /><span className="form-hint">Text and emoji only</span><button className="button button-rose" type="submit">Send</button></form>
+      {query.error && <p className="form-error chat-error" role="alert"><LocalizedPageText translationKey="messageNotSent" /></p>}
+      <form className="chat-compose" action={sendMessage}><input type="hidden" name="conversation_id" value={conversationId} /><label className="sr-only" htmlFor="message"><LocalizedPageText translationKey="writeMessage" /></label><LocalizedTextarea id="message" name="body" translationKey="writeMessage" maxLength={2000} rows={1} required /><span className="form-hint"><LocalizedPageText translationKey="textEmojiOnly" /></span><button className="button button-rose" type="submit"><LocalizedPageText translationKey="send" /></button></form>
     </section>
   );
 }

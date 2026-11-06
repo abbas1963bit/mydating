@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Chrome } from "lucide-react";
 import { AuthFeedback, AuthLayout } from "@/components/auth-ui";
-import { LocalizedText } from "@/components/language-provider";
+import { LocalizedPageText, LocalizedText } from "@/components/language-provider";
 import { signIn, signInWithGoogle } from "@/app/actions/auth";
 
 export const metadata: Metadata = { title: "Log in" };
@@ -10,11 +10,11 @@ export const metadata: Metadata = { title: "Log in" };
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; updated?: string }> }) {
   const params = await searchParams;
   return (
-    <AuthLayout title="Good to see you again." description="Pick up where your next good conversation left off.">
+    <AuthLayout title={<LocalizedPageText translationKey="loginAsideTitle" />} description={<LocalizedPageText translationKey="loginAsideBody" />}>
       <div className="auth-form">
         <Link href="/" className="back-home"><ArrowLeft size={14} /><LocalizedText translationKey="backHome" /></Link>
         <h2><LocalizedText translationKey="signIn" /></h2>
-        <p className="auth-subtitle">Welcome back. Your people are right here.</p>
+        <p className="auth-subtitle"><LocalizedPageText translationKey="loginSubtitle" /></p>
         <AuthFeedback error={params.error} updated={params.updated === "1"} />
         <form action={signIn}>
           <div className="form-field"><label htmlFor="email"><LocalizedText translationKey="email" /></label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} required /></div>

@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { LanguagePicker } from "@/components/language-picker";
 
-export function AuthLayout({ title, description, children }: Readonly<{ title: string; description: string; children: React.ReactNode }>) {
+export function AuthLayout({ title, description, children }: Readonly<{ title: React.ReactNode; description: React.ReactNode; children: React.ReactNode }>) {
   return (
     <main className="auth-shell">
       <aside className="auth-aside">

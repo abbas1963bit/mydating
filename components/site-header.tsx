@@ -9,11 +9,11 @@ export function SiteHeader() {
   const { t } = useLanguage();
   return (
     <header className="site-header">
-      <Link href="/" className="wordmark" aria-label="WeDating home">
+      <Link href="/" className="wordmark" aria-label={t("brandHome")}>
         <span className="brand-mark"><Heart size={17} fill="currentColor" strokeWidth={2.2} /></span>
         <span>WeDating</span>
       </Link>
-      <nav className="main-nav" aria-label="Main navigation">
+      <nav className="main-nav" aria-label={t("mainNavigation")}>
         <Link href="/discover"><Compass size={16} />{t("navDiscover")}</Link>
         <Link href="/#how-it-works">{t("navHow")}</Link>
         <Link href="/#safety"><ShieldCheck size={16} />{t("navSafety")}</Link>
@@ -24,7 +24,7 @@ export function SiteHeader() {
         <Link className="button button-small" href="/sign-up">{t("signUp")} <span aria-hidden="true">↗</span></Link>
       </div>
       <details className="mobile-menu">
-        <summary aria-label="Open menu"><Menu size={21} /></summary>
+        <summary aria-label={t("openMenu")}><Menu size={21} /></summary>
         <nav>
           <Link href="/discover">{t("navDiscover")}</Link>
           <Link href="/#how-it-works">{t("navHow")}</Link>

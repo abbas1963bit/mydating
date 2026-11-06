@@ -4,6 +4,7 @@ import { Eye } from "lucide-react";
 import { ProfileCard, type ProfileCardData } from "@/components/profile-card";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
+import { LocalizedDatePhrase, LocalizedPageText } from "@/components/language-provider";
 
 export const metadata: Metadata = { title: "Profile visitors" };
 
@@ -22,8 +23,8 @@ export default async function VisitorsPage() {
 
   return (
     <>
-      <div className="page-heading"><div><span className="eyebrow-small">Who stopped by</span><h1>Profile visitors</h1><p>People who have recently viewed your profile appear here.</p></div></div>
-      {profiles.length ? <div className="profile-grid">{profiles.map((profile) => <div key={profile.id} className="activity-profile"><ProfileCard profile={profile} /><span className="visit-date">Visited {new Date(unique.get(profile.id)!).toLocaleDateString()}</span></div>)}</div> : <div className="empty-state"><Eye size={23} /><h2>Your profile is ready for its first visit</h2><p>When another member views your profile, you will see them here.</p><Link className="button button-outline" href="/profile/edit">Add to your profile</Link></div>}
+      <div className="page-heading"><div><span className="eyebrow-small"><LocalizedPageText translationKey="visitorsTitle" /></span><h1><LocalizedPageText translationKey="visitorsTitle" /></h1><p><LocalizedPageText translationKey="visitorsIntro" /></p></div></div>
+      {profiles.length ? <div className="profile-grid">{profiles.map((profile) => <div key={profile.id} className="activity-profile"><ProfileCard profile={profile} /><span className="visit-date"><LocalizedDatePhrase translationKey="visited" value={unique.get(profile.id)!} /></span></div>)}</div> : <div className="empty-state"><Eye size={23} /><h2><LocalizedPageText translationKey="visitorsEmptyTitle" /></h2><p><LocalizedPageText translationKey="visitorsEmptyBody" /></p><Link className="button button-outline" href="/profile/edit"><LocalizedPageText translationKey="addToProfile" /></Link></div>}
     </>
   );
 }

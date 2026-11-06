@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Bell, Heart, MessageCircle, Sparkles, Users } from "lucide-react";
 import { ProfileCard, type ProfileCardData } from "@/components/profile-card";
+import { LocalizedPageText } from "@/components/language-provider";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
 
@@ -35,16 +36,16 @@ export default async function MemberHomePage() {
 
   return (
     <>
-      <section className="welcome-banner"><div><span className="eyebrow-small">Your next chapter</span><h1>Good to see you, {ownProfile?.display_name?.split(" ")[0] ?? "there"}.</h1><p>Take a look around. Someone interesting might be one hello away.</p></div><Link className="button button-rose" href="/discover">Explore people <ArrowUpRight size={15} /></Link></section>
+      <section className="welcome-banner"><div><span className="eyebrow-small"><LocalizedPageText translationKey="homeEyebrow" /></span><h1>{ownProfile?.display_name ? <LocalizedPageText translationKey="welcomeName" variables={{ name: ownProfile.display_name.split(" ")[0] }} /> : <LocalizedPageText translationKey="welcomeDefault" />}</h1><p><LocalizedPageText translationKey="welcomeBody" /></p></div><Link className="button button-rose" href="/discover"><LocalizedPageText translationKey="explorePeople" /> <ArrowUpRight size={15} /></Link></section>
       <div className="dashboard-grid">
         <div className="dashboard-main">
-          <div className="panel-title"><h2>People you might connect with</h2><Link href="/discover">More people <ArrowUpRight size={14} /></Link></div>
-          {suggestions.length ? <div className="profile-grid">{suggestions.map((profile) => <ProfileCard key={profile.id} profile={profile} />)}</div> : <div className="empty-state"><Users size={24} /><h2>Your discovery starts with a profile</h2><p>Add a few details about yourself and the people you hope to meet. Your suggestions get more thoughtful as you do.</p><Link className="button button-rose" href="/profile/edit">Complete your profile <ArrowUpRight size={14} /></Link></div>}
+          <div className="panel-title"><h2><LocalizedPageText translationKey="suggestedPeople" /></h2><Link href="/discover"><LocalizedPageText translationKey="morePeople" /> <ArrowUpRight size={14} /></Link></div>
+          {suggestions.length ? <div className="profile-grid">{suggestions.map((profile) => <ProfileCard key={profile.id} profile={profile} />)}</div> : <div className="empty-state"><Users size={24} /><h2><LocalizedPageText translationKey="profileStartTitle" /></h2><p><LocalizedPageText translationKey="profileStartBody" /></p><Link className="button button-rose" href="/profile/edit"><LocalizedPageText translationKey="completeProfile" /> <ArrowUpRight size={14} /></Link></div>}
         </div>
         <aside className="dashboard-aside">
-          <section className="panel"><div className="panel-title"><h2>Your profile</h2><Link href="/profile/edit">Edit</Link></div><div className="completion-meter"><div><span>Profile completion</span><strong>{completion}%</strong></div><div className="meter-track"><span style={{ width: `${completion}%` }} /></div><span className="completion-note">A little more about you helps the right person find you.</span></div></section>
-          <section className="panel"><div className="panel-title"><h2>Your activity</h2><Link href="/notifications">See all</Link></div><div className="quick-link-list"><Link href="/likes"><Heart size={16} />Likes received<span>{likeCount ?? 0}</span></Link><Link href="/messages"><MessageCircle size={16} />Conversations<span>{messageCount ?? 0}</span></Link><Link href="/notifications"><Bell size={16} />New updates<span>{unreadCount ?? 0}</span></Link></div></section>
-          <section className="panel"><div className="panel-title"><h2>Try this next</h2><Sparkles size={16} color="var(--rose-deep)" /></div><p className="completion-note">A specific introduction gives people something easy to start a conversation about.</p><Link className="button button-outline" href="/profile/edit" style={{ width: "100%", marginTop: 12 }}>Add a little more about you</Link></section>
+          <section className="panel"><div className="panel-title"><h2><LocalizedPageText translationKey="yourProfile" /></h2><Link href="/profile/edit"><LocalizedPageText translationKey="edit" /></Link></div><div className="completion-meter"><div><span><LocalizedPageText translationKey="profileCompletion" /></span><strong>{completion}%</strong></div><div className="meter-track"><span style={{ width: `${completion}%` }} /></div><span className="completion-note"><LocalizedPageText translationKey="completionTip" /></span></div></section>
+          <section className="panel"><div className="panel-title"><h2><LocalizedPageText translationKey="yourActivity" /></h2><Link href="/notifications"><LocalizedPageText translationKey="seeAll" /></Link></div><div className="quick-link-list"><Link href="/likes"><Heart size={16} /><LocalizedPageText translationKey="likesReceived" /><span>{likeCount ?? 0}</span></Link><Link href="/messages"><MessageCircle size={16} /><LocalizedPageText translationKey="conversations" /><span>{messageCount ?? 0}</span></Link><Link href="/notifications"><Bell size={16} /><LocalizedPageText translationKey="newUpdates" /><span>{unreadCount ?? 0}</span></Link></div></section>
+          <section className="panel"><div className="panel-title"><h2><LocalizedPageText translationKey="tryNext" /></h2><Sparkles size={16} color="var(--rose-deep)" /></div><p className="completion-note"><LocalizedPageText translationKey="nextTip" /></p><Link className="button button-outline" href="/profile/edit" style={{ width: "100%", marginTop: 12 }}><LocalizedPageText translationKey="addMoreAboutYou" /></Link></section>
         </aside>
       </div>
     </>

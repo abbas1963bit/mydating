@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Chrome } from "lucide-react";
 import { AuthFeedback, AuthLayout } from "@/components/auth-ui";
-import { LocalizedText } from "@/components/language-provider";
+import { LocalizedPageText, LocalizedText } from "@/components/language-provider";
 import { signInWithGoogle, signUp } from "@/app/actions/auth";
 
 export const metadata: Metadata = { title: "Create your account" };
@@ -10,15 +10,15 @@ export const metadata: Metadata = { title: "Create your account" };
 export default async function SignUpPage({ searchParams }: { searchParams: Promise<{ error?: string; sent?: string }> }) {
   const params = await searchParams;
   return (
-    <AuthLayout title="A better hello starts here." description="Create your profile, meet people with intention, and see where a good conversation leads.">
+    <AuthLayout title={<LocalizedPageText translationKey="signupAsideTitle" />} description={<LocalizedPageText translationKey="signupAsideBody" />}>
       <div className="auth-form">
         <Link href="/" className="back-home"><ArrowLeft size={14} /><LocalizedText translationKey="backHome" /></Link>
         <h2><LocalizedText translationKey="createAccount" /></h2>
-        <p className="auth-subtitle">A few details are all you need to begin.</p>
+        <p className="auth-subtitle"><LocalizedPageText translationKey="signupSubtitle" /></p>
         <AuthFeedback error={params.error} sent={params.sent === "1"} />
         <form action={signUp}>
           <div className="form-field"><label htmlFor="name"><LocalizedText translationKey="name" /></label><input id="name" name="name" autoComplete="name" minLength={2} maxLength={60} required /></div>
-          <div className="form-field"><label htmlFor="age">Age</label><input id="age" name="age" type="number" min="18" max="120" inputMode="numeric" required /><span className="form-hint">WeDating is for adults 18 and over.</span></div>
+          <div className="form-field"><label htmlFor="age"><LocalizedPageText translationKey="age" /></label><input id="age" name="age" type="number" min="18" max="120" inputMode="numeric" required /><span className="form-hint"><LocalizedPageText translationKey="adultNote" /></span></div>
           <div className="form-field"><label htmlFor="email"><LocalizedText translationKey="email" /></label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} required /></div>
           <div className="form-field"><label htmlFor="password"><LocalizedText translationKey="password" /></label><input id="password" name="password" type="password" autoComplete="new-password" minLength={10} maxLength={72} required /><span className="form-hint"><LocalizedText translationKey="passwordRule" /></span></div>
           <div className="form-field"><label htmlFor="confirmPassword"><LocalizedText translationKey="confirmPassword" /></label><input id="confirmPassword" name="confirmPassword" type="password" autoComplete="new-password" minLength={10} maxLength={72} required /></div>
@@ -28,7 +28,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
         <div className="auth-divider"><LocalizedText translationKey="orEmail" /></div>
         <form action={signInWithGoogle}><button className="button button-outline" type="submit"><Chrome size={16} /><LocalizedText translationKey="continueGoogle" /></button></form>
         <p className="auth-switch"><LocalizedText translationKey="alreadyAccount" /> <Link href="/login"><LocalizedText translationKey="signIn" /></Link></p>
-        <p className="legal-copy">By continuing, you confirm that you are at least 18 and agree to our <Link href="/terms">Terms</Link> and <Link href="/privacy">Privacy Policy</Link>.</p>
+        <p className="legal-copy"><LocalizedPageText translationKey="termsAgreement" /></p>
       </div>
     </AuthLayout>
   );

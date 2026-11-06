@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Search } from "lucide-react";
 import { ProfileCard, type ProfileCardData } from "@/components/profile-card";
+import { LocalizedInput, LocalizedPageText } from "@/components/language-provider";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
 
@@ -41,23 +42,23 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
 
   return (
     <>
-      <div className="page-heading"><div><span className="eyebrow-small">Find your kind of person</span><h1>Discover</h1><p>Use the details that matter to you. You can change them whenever you like.</p></div></div>
-      {params.error && <p className="form-error" role="alert">That action could not be completed. Please try again.</p>}
-      {params.liked && <p className="form-success" role="status">Interest sent. See received likes in your Likes list.</p>}
-      {params.reported && <p className="form-success" role="status">Thanks for helping keep the community thoughtful. Your report was sent for review.</p>}
+      <div className="page-heading"><div><span className="eyebrow-small"><LocalizedPageText translationKey="discoverEyebrow" /></span><h1><LocalizedPageText translationKey="discoverTitle" /></h1><p><LocalizedPageText translationKey="discoverBody" /></p></div></div>
+      {params.error && <p className="form-error" role="alert"><LocalizedPageText translationKey="actionError" /></p>}
+      {params.liked && <p className="form-success" role="status"><LocalizedPageText translationKey="likeSent" /></p>}
+      {params.reported && <p className="form-success" role="status"><LocalizedPageText translationKey="reportSent" /></p>}
       <form className="search-panel" method="get">
-        <div className="search-field search-wide"><label htmlFor="q">Name or keyword</label><input id="q" name="q" placeholder="Try a name or something they love" defaultValue={value("q")} /></div>
-        <div className="search-field"><label htmlFor="gender">Gender</label><select id="gender" name="gender" defaultValue={value("gender")}><option value="">Any</option><option>Woman</option><option>Man</option><option>Non-binary</option><option>Other</option></select></div>
-        <div className="search-field"><label htmlFor="country">Country</label><input id="country" name="country" placeholder="Any country" defaultValue={value("country")} /></div>
-        <div className="search-field"><label htmlFor="city">City</label><input id="city" name="city" placeholder="Any city" defaultValue={value("city")} /></div>
-        <div className="search-field"><label htmlFor="language">Language</label><input id="language" name="language" placeholder="e.g. en, ar" defaultValue={value("language")} /></div>
-        <div className="search-field"><label htmlFor="marital_status">Relationship status</label><select id="marital_status" name="marital_status" defaultValue={value("marital_status")}><option value="">Any</option><option>Single</option><option>Divorced</option><option>Widowed</option></select></div>
-        <div className="search-field age-field"><label>Age range</label><div><input aria-label="Minimum age" name="min_age" type="number" min="18" max="120" placeholder="18" defaultValue={value("min_age")} /><span>to</span><input aria-label="Maximum age" name="max_age" type="number" min="18" max="120" placeholder="120" defaultValue={value("max_age")} /></div></div>
-        <div className="search-field"><label htmlFor="interests">Interests</label><input id="interests" name="interests" placeholder="Reading, travel" defaultValue={value("interests")} /></div>
-        <button className="button button-rose search-submit" type="submit"><Search size={16} />Search people</button>
+        <div className="search-field search-wide"><label htmlFor="q"><LocalizedPageText translationKey="nameKeyword" /></label><LocalizedInput id="q" name="q" translationKey="namePlaceholder" defaultValue={value("q")} /></div>
+        <div className="search-field"><label htmlFor="gender"><LocalizedPageText translationKey="gender" /></label><select id="gender" name="gender" defaultValue={value("gender")}><option value=""><LocalizedPageText translationKey="any" /></option><option value="Woman"><LocalizedPageText translationKey="woman" /></option><option value="Man"><LocalizedPageText translationKey="man" /></option><option value="Non-binary"><LocalizedPageText translationKey="nonBinary" /></option><option value="Other"><LocalizedPageText translationKey="other" /></option></select></div>
+        <div className="search-field"><label htmlFor="country"><LocalizedPageText translationKey="country" /></label><LocalizedInput id="country" name="country" translationKey="anyCountry" defaultValue={value("country")} /></div>
+        <div className="search-field"><label htmlFor="city"><LocalizedPageText translationKey="city" /></label><LocalizedInput id="city" name="city" translationKey="anyCity" defaultValue={value("city")} /></div>
+        <div className="search-field"><label htmlFor="language"><LocalizedPageText translationKey="language" /></label><input id="language" name="language" placeholder="en, ar, zh-CN" defaultValue={value("language")} /></div>
+        <div className="search-field"><label htmlFor="marital_status"><LocalizedPageText translationKey="relationshipStatus" /></label><select id="marital_status" name="marital_status" defaultValue={value("marital_status")}><option value=""><LocalizedPageText translationKey="any" /></option><option value="Single"><LocalizedPageText translationKey="single" /></option><option value="Divorced"><LocalizedPageText translationKey="divorced" /></option><option value="Widowed"><LocalizedPageText translationKey="widowed" /></option></select></div>
+        <div className="search-field age-field"><label><LocalizedPageText translationKey="ageRange" /></label><div><LocalizedInput name="min_age" type="number" min="18" max="120" placeholder="18" defaultValue={value("min_age")} ariaTranslationKey="minimumAge" /><span>–</span><LocalizedInput name="max_age" type="number" min="18" max="120" placeholder="120" defaultValue={value("max_age")} ariaTranslationKey="maximumAge" /></div></div>
+        <div className="search-field"><label htmlFor="interests"><LocalizedPageText translationKey="interests" /></label><LocalizedInput id="interests" name="interests" translationKey="interestsExample" defaultValue={value("interests")} /></div>
+        <button className="button button-rose search-submit" type="submit"><Search size={16} /><LocalizedPageText translationKey="searchPeople" /></button>
       </form>
-      <div className="results-heading"><h2>{results.length ? `${results.length} ${results.length === 1 ? "person" : "people"} to explore` : "Your search"}</h2><span>Showing active profiles</span></div>
-      {error ? <div className="empty-state"><h2>Search is temporarily unavailable</h2><p>Please try again shortly.</p></div> : results.length ? <div className="profile-grid">{results.map((profile) => <ProfileCard key={profile.id} profile={profile} />)}</div> : <div className="empty-state"><Search size={23} /><h2>No profiles match these filters yet</h2><p>Try widening your search, or check back as more people join.</p><a className="button button-outline" href="/discover">Clear filters</a></div>}
+      <div className="results-heading"><h2>{results.length ? <LocalizedPageText translationKey="resultCount" variables={{ count: String(results.length) }} /> : <LocalizedPageText translationKey="yourSearch" />}</h2><span><LocalizedPageText translationKey="activeProfiles" /></span></div>
+      {error ? <div className="empty-state"><h2><LocalizedPageText translationKey="searchUnavailable" /></h2><p><LocalizedPageText translationKey="tryAgain" /></p></div> : results.length ? <div className="profile-grid">{results.map((profile) => <ProfileCard key={profile.id} profile={profile} />)}</div> : <div className="empty-state"><Search size={23} /><h2><LocalizedPageText translationKey="noMatches" /></h2><p><LocalizedPageText translationKey="widenSearch" /></p><a className="button button-outline" href="/discover"><LocalizedPageText translationKey="clearFilters" /></a></div>}
     </>
   );
 }

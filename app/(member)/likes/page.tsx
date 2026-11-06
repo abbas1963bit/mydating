@@ -4,6 +4,7 @@ import { Heart, Sparkles } from "lucide-react";
 import { ProfileCard, type ProfileCardData } from "@/components/profile-card";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "@/lib/profile-images";
+import { LocalizedNav, LocalizedPageText } from "@/components/language-provider";
 
 export const metadata: Metadata = { title: "Likes" };
 
@@ -24,10 +25,10 @@ export default async function LikesPage({ searchParams }: { searchParams: Promis
 
   return (
     <>
-      <div className="page-heading"><div><span className="eyebrow-small">A little mutual curiosity</span><h1>Likes</h1><p>See who is interested, and revisit the people who caught your eye.</p></div></div>
-      <nav className="segmented-tabs" aria-label="Likes"><Link href="/likes?view=received" className={view === "received" ? "active" : ""}>Received</Link><Link href="/likes?view=sent" className={view === "sent" ? "active" : ""}>Sent</Link></nav>
-      {params.updated && <p className="form-success" role="status">Your likes were updated.</p>}{params.error && <p className="form-error" role="alert">That action could not be completed.</p>}
-      {profiles.length ? <div className="profile-grid">{profiles.map((profile) => <ProfileCard key={profile.id} profile={profile} variant={view === "sent" ? "sent-like" : "default"} />)}</div> : <div className="empty-state"><span className="empty-icon"><Heart size={22} /></span><h2>{view === "received" ? "Your next hello may be just around the corner" : "People you like will show up here"}</h2><p>{view === "received" ? "Complete your profile and keep meeting people. When someone sends interest, you will find it here." : "Browse profiles and send a like when someone catches your attention."}</p><Link className="button button-rose" href="/discover"><Sparkles size={15} />Discover people</Link></div>}
+      <div className="page-heading"><div><span className="eyebrow-small"><LocalizedPageText translationKey="likesTitle" /></span><h1><LocalizedPageText translationKey="likesTitle" /></h1><p><LocalizedPageText translationKey="likesIntro" /></p></div></div>
+      <LocalizedNav className="segmented-tabs" translationKey="likesTitle"><Link href="/likes?view=received" className={view === "received" ? "active" : ""}><LocalizedPageText translationKey="received" /></Link><Link href="/likes?view=sent" className={view === "sent" ? "active" : ""}><LocalizedPageText translationKey="sent" /></Link></LocalizedNav>
+      {params.updated && <p className="form-success" role="status"><LocalizedPageText translationKey="likesUpdated" /></p>}{params.error && <p className="form-error" role="alert"><LocalizedPageText translationKey="likesError" /></p>}
+      {profiles.length ? <div className="profile-grid">{profiles.map((profile) => <ProfileCard key={profile.id} profile={profile} variant={view === "sent" ? "sent-like" : "default"} />)}</div> : <div className="empty-state"><span className="empty-icon"><Heart size={22} /></span><h2><LocalizedPageText translationKey={view === "received" ? "receivedEmptyTitle" : "sentEmptyTitle"} /></h2><p><LocalizedPageText translationKey={view === "received" ? "receivedEmptyBody" : "sentEmptyBody"} /></p><Link className="button button-rose" href="/discover"><Sparkles size={15} /><LocalizedPageText translationKey="discoverMembers" /></Link></div>}
     </>
   );
 }
